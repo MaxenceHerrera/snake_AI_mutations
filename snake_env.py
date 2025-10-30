@@ -26,7 +26,7 @@ class Snake_env:
     snakePos = self.snake[-1]
     diff = np.radians(snakePos - self.apple)
 
-    x = np.array([math.atan2(diff[0], diff[1]), snakePos[0] / self.width, snakePos[1] / self.height])
+    x = np.array([math.atan2(diff[0], diff[1]), snakePos[0] / self.width, snakePos[1] / self.height, self.direction[0], self.direction[1]])
 
     return x
 

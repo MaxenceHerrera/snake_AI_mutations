@@ -18,7 +18,7 @@ def play(population):
 
 batch_size = 100
 
-size = [3, 140, 4]
+size = [5, 140, 4]
 
 population_n = 1000
 
