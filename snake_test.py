@@ -2,12 +2,21 @@ from snake_env import Snake_env
 import pygame
 import time
 import keyboard
+import random
 
-env = Snake_env(20, 20, 800, 800, 2, pygame_env=True)
+width = 20
+height = 20
+
+random_apples = [(random.randint(1, width - 2), random.randint(1, height - 2)) for _ in range(10000)]
+random_snakes = [(random.randint(1, width - 2), random.randint(1, height - 2)) for _ in range(10000)]
+
+env = Snake_env(20, 20, 800, 800, 2, random_apples, random_snakes, pygame_env=True)
 
 action = 1
 
 env.reset()
+
+score = 0
 
 while True:
     tm = time.time()
@@ -15,20 +24,26 @@ while True:
     action = 1
 
     if keyboard.is_pressed("d"):
-        action = 2
+        env.direction = (1, 0)
 
     elif keyboard.is_pressed("w"):
-        action = 1
+        env.direction = (0, -1)
 
     elif keyboard.is_pressed("a"):
-        action = 0
+        env.direction = (-1, 0)
 
-    _, _, done, _ = env.step(action)
+    elif keyboard.is_pressed("s"):
+        env.direction = (0, 1)
+
+    _, reward, done, _ = env.step(1)
+
+    if (reward > 1):
+        score += 1
 
     if done:
         env.reset()
 
-    env.render()
+    env.render(score=score)
 
     start = time.time()
 
