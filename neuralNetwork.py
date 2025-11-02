@@ -8,8 +8,10 @@ class NeuralNetwork:
     self.output_size = output_size
 
     self.w1 = np.random.random((hidden_size, input_size)) * 2 - 1
-
     self.w2 = np.random.random((output_size, hidden_size)) * 2 - 1
+
+    self.b1 = np.zeros(hidden_size)
+    self.b2 = np.zeros(output_size)
 
     self.x = None
 
@@ -38,14 +40,24 @@ class NeuralNetwork:
     return x * (1 - x)
 
   def forward(self, x):
-    self.z1 = np.dot(self.w1, x)
+    self.z1 = np.dot(self.w1, x) + self.b1
 
     self.a1 = self.relu(self.z1)
 
-    self.z2 = np.dot(self.w2, self.a1)
-    self.a2 = self.softmax(self.z2)
+    self.z2 = np.dot(self.w2, self.a1) + self.b2
+    self.a2 = self.relu(self.z2)
 
-    return self.a2
+    return self.softmax(self.a2)
+
+  def forward2(self, x):
+    self.z1 = np.dot(self.w1, x) + self.b1
+
+    self.a1 = self.relu(self.z1)
+
+    self.z2 = np.dot(self.w2, self.a1) + self.b2
+    self.a2 = self.relu(self.z2)
+
+    return x, self.a1, self.softmax(self.a2)
 
   def chooseAction(self, x):
     return np.argmax(self.forward(x))
@@ -57,8 +69,24 @@ class mutatedNeuralNetwork(NeuralNetwork):
     self.w1 = original.w1
     self.w2 = original.w2
 
+    self.b1 = original.b1
+    self.b2 = original.b2
+
     dw1 = np.random.random((original.hidden_size, original.input_size)) * random.uniform(-maxMutation, maxMutation)
     dw2 = np.random.random((original.output_size, original.hidden_size)) * random.uniform(-maxMutation, maxMutation)
 
+    db1 = np.random.random(original.hidden_size) * random.uniform(-maxMutation, maxMutation)
+    db2 = np.random.random(original.output_size) * random.uniform(-maxMutation, maxMutation)
+
     self.w1 += dw1
     self.w2 += dw2
+
+    self.b1 += db1
+    self.b2 += db2
+
+    if (random.random() < 0.05):
+        self.w1 = np.random.random((original.hidden_size, original.input_size)) * 2 - 1
+        self.w2 = np.random.random((original.output_size, original.hidden_size)) * 2 - 1
+
+        self.b1 = np.random.random(original.hidden_size)
+        self.b2 = np.random.random(original.output_size)
