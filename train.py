@@ -1,9 +1,3 @@
-import pyximport; pyximport.install()
-import main2
-
-#main2.main()
-
-import pyximport; pyximport.install()
 from snake_env import Snake_env
 import numpy as np
 import random
