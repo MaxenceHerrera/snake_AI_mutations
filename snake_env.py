@@ -258,7 +258,7 @@ class Snake_env:
 
     return board
 
-  def render(self, agent, probs=[[0, 0, 0]], score=0):
+  def render(self, agent="", probs=[[0, 0, 0]], score=0):
     self.surface.fill((0, 0, 0))
 
     for event in pygame.event.get():
@@ -268,51 +268,52 @@ class Snake_env:
     for pos in self.snake:
       pygame.draw.rect(self.surface, (0, 255, 0), pygame.Rect(pos[0] * (self.renderWidth / self.width), pos[1] * (self.renderHeight / self.height), self.renderWidth / self.width, self.renderHeight / self.height))
 
-    size = self.renderHeight / 2.5
-    start = self.renderWidth * 0.1
-    span = self.renderWidth * 0.5
+    if (agent != ""):
+        size = self.renderHeight / 2.5
+        start = self.renderWidth * 0.1
+        span = self.renderWidth * 0.5
 
-    gap1 = size / agent.w1.shape[1]
-    gap2 = size / agent.w2.shape[1]
-    gap3 = size / agent.w2.shape[0]
+        gap1 = size / agent.w1.shape[1]
+        gap2 = size / agent.w2.shape[1]
+        gap3 = size / agent.w2.shape[0]
 
-    neuronSize = min(gap1, gap2, gap3) / 3
-    gap = min(gap1, gap2, gap3)
-    maxSize = max(agent.w1.shape[1], agent.w2.shape[1], agent.w2.shape[0]) * gap + self.renderHeight * 0.1
+        neuronSize = min(gap1, gap2, gap3) / 3
+        gap = min(gap1, gap2, gap3)
+        maxSize = max(agent.w1.shape[1], agent.w2.shape[1], agent.w2.shape[0]) * gap + self.renderHeight * 0.1
 
 
-    half1 = agent.w1.shape[1] / 2 * gap
-    half2 = agent.w2.shape[1] / 2 * gap
-    half3 = agent.w2.shape[0] / 2 * gap
+        half1 = agent.w1.shape[1] / 2 * gap
+        half2 = agent.w2.shape[1] / 2 * gap
+        half3 = agent.w2.shape[0] / 2 * gap
 
-    for i, w1 in enumerate(agent.w1):
-        pos = (start + span / 2, maxSize / 2 - half2 + (i * gap))
+        for i, w1 in enumerate(agent.w1):
+            pos = (start + span / 2, maxSize / 2 - half2 + (i * gap))
 
-        pygame.draw.circle(self.surface, np.array([255, 255, 255]) * agent.sigmoid(probs[1][i]), pos, neuronSize)
+            pygame.draw.circle(self.surface, np.array([255, 255, 255]) * agent.sigmoid(probs[1][i]), pos, neuronSize)
 
-        for j, w2 in enumerate(w1):
-            pos1 = (start, maxSize / 2 - half1 + (j * gap))
+            for j, w2 in enumerate(w1):
+                pos1 = (start, maxSize / 2 - half1 + (j * gap))
 
-            color = (255, 0, 0) if w2 < 0 else (0, 0, 255)
+                color = (255, 0, 0) if w2 < 0 else (0, 0, 255)
 
-            pygame.draw.line(self.surface, color, pos, pos1, int(math.log(abs(w2 * 5) + 2, 2)))
+                pygame.draw.line(self.surface, color, pos, pos1, int(math.log(abs(w2 * 5) + 2, 2)))
 
-    for i, w1 in enumerate(agent.w2):
-        pos = (start + span, maxSize / 2 - half3 + (i * gap))
+        for i, w1 in enumerate(agent.w2):
+            pos = (start + span, maxSize / 2 - half3 + (i * gap))
 
-        pygame.draw.circle(self.surface, np.array([255, 255, 255]) * agent.sigmoid(probs[2][i]), pos, neuronSize)
+            pygame.draw.circle(self.surface, np.array([255, 255, 255]) * agent.sigmoid(probs[2][i]), pos, neuronSize)
 
-        for j, w2 in enumerate(w1):
-            pos1 = (start + span / 2, maxSize / 2 - half2 + (j * gap))
+            for j, w2 in enumerate(w1):
+                pos1 = (start + span / 2, maxSize / 2 - half2 + (j * gap))
 
-            color = (255, 0, 0) if w2 < 0 else (0, 0, 255)
+                color = (255, 0, 0) if w2 < 0 else (0, 0, 255)
 
-            pygame.draw.line(self.surface, color, pos, pos1, int(math.log(abs(w2 * 5) + 2, 2)))
+                pygame.draw.line(self.surface, color, pos, pos1, int(math.log(abs(w2 * 5) + 2, 2)))
 
-    for i in range(agent.w1.shape[1]):
-        pos = (start, maxSize / 2 - half1 + (i * gap))
+        for i in range(agent.w1.shape[1]):
+            pos = (start, maxSize / 2 - half1 + (i * gap))
 
-        pygame.draw.circle(self.surface, np.array([255, 255, 255]) * agent.sigmoid(probs[0][i]), pos, neuronSize)
+            pygame.draw.circle(self.surface, np.array([255, 255, 255]) * agent.sigmoid(probs[0][i]), pos, neuronSize)
 
 
     pygame.draw.rect(self.surface, (255, 50, 50), pygame.Rect(self.snake[-1][0] * (self.renderWidth / self.width), self.snake[-1][1] * (self.renderHeight / self.height), self.renderWidth / self.width, self.renderHeight / self.height))
