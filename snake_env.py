@@ -201,14 +201,22 @@ class Snake_env:
 
       self.apple = self.random_apples[i]
 
-      while self.apple in self.snake:
+      testing = True
+
+      while testing:
           i += 1
 
           if (i >= len(self.random_apples)):
-              self.apple = (random.randint(1, self.width - 2), random.randint(1, self.height - 2))
+              self.apple = [random.randint(1, self.width - 2), random.randint(1, self.height - 2)]
 
           else:
               self.apple = self.random_apples[i]
+
+          for pos in self.snake:
+              if pos.tolist() != self.apple:
+                  testing = False
+
+                  break
 
     if (pos2.tolist() in self.last4Positions):
         reward -= 1

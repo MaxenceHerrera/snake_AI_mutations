@@ -41,11 +41,25 @@ while True:
         score += 1
 
     if done:
+        print(score)
+
+        score = 0
+
         env.reset()
 
     env.render(score=score)
 
     start = time.time()
 
-    while time.time() - start < 0.2:
-        pass
+    while time.time() - start < 0.1:
+        if keyboard.is_pressed("d"):
+            env.direction = (1, 0)
+
+        elif keyboard.is_pressed("w"):
+            env.direction = (0, -1)
+
+        elif keyboard.is_pressed("a"):
+            env.direction = (-1, 0)
+
+        elif keyboard.is_pressed("s"):
+            env.direction = (0, 1)

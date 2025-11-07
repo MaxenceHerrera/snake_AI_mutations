@@ -20,12 +20,12 @@ def step_agent():
         score += 1
 
     if done:
-        random_apples = [(random.randint(1, width - 2), random.randint(1, height - 2)) for _ in range(10000)]
-        random_snakes = [(random.randint(1, width - 2), random.randint(1, height - 2)) for _ in range(10000)]
+        env.random_apples = [(random.randint(1, width - 2), random.randint(1, height - 2)) for _ in range(10000)]
+        env.random_snakes = [(random.randint(1, width - 2), random.randint(1, height - 2)) for _ in range(10000)]
 
         state = env.reset()
 
-        print(score // 5)
+        print(score)
 
         score = 0
 
@@ -58,6 +58,6 @@ score = 0
 
 while True:
     play()
-    env.render(population[0], population[0].forward2(env.getInput()), round(score, 2))
+    env.render(score=round(score, 2))
 
-    time.sleep(0.1)
+    #time.sleep(0.1)
